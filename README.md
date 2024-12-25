@@ -1,4 +1,4 @@
-# Design-Patterns 【设计模式学习笔记】
+# 【设计模式学习笔记】Design-Patterns
 ​
 ## 学习声明：
 
