@@ -125,43 +125,76 @@ e.g. 单例模式 ——> 系统开销
 - 实例化对象不使用new，用工厂代替
 - 将选择实现类，创建对象统一管理和控制。从而将调用者与实现类解耦。
 ## 5. 代码示例：
-### 5.1 简单工厂：
+### 5.1 简单工厂：【静态工厂】
 1. **接口实现**：Car **Interface**  
 ```Java
-public interface Car(){
-  void name()
+public interface Car {
+  void name();
 }
 ```
 2. **实现类**：
 - Wuling Car **Class**  
 ```Java
-public class Wuling() implement Car{
+public class Wuling implement Car {
   public void name(){
-    system.out.println("五菱宏光")
+    system.out.println("五菱宏光");
   }
 }
 ```
 ​- Tesla **Class**:
 ```Java
-public class Tesla() implement Car{
+public class Tesla implement Car{
   public void name(){
-    system.out.println("特斯拉")
+    system.out.println("特斯拉");
   }
 }
 ```
-3. **测试类**：Consumer **Class**
+3. **工厂类**：Factory **Class**  
 ```Java
-public class Consumer(){
+// 简单工厂 —— 也叫【静态工厂】
+// 增加一个新产品，不修改code做不到
+// 但大多数情况仍然很多使用 简单工厂，因为开闭原则的满足可能需要很大的代价
+
+// 开闭原则
+public class CarFactory {
+  // 方法一：但**简单工厂模式**这样有个缺点不符合OOP原则1：开闭原则，当新的对象出现时，仍然需要修改该方法的逻辑
+  public static Car getCar(String car){ // 这里的第一个**Car**代表返回的是一个一个**Car()对象**
+    if (car.equals("五菱"){
+      return new Wuling();
+    }else if (car.equal("特斯拉")){
+      return new Tesla();
+    }else{
+      return null;
+    }
+  }
+
+  // 方法2: 虽然不需要改变方法代码逻辑，但仍然需要修改工厂类；这是简单工厂模式的缺陷，所以他也叫静态工厂模式；(都是静态方法Static)
+  public Car getWuling(){
+    return new Wuling()
+  }
+  public Car getTesla(){
+    return new Tesla()
+  }
+}
+```
+4. **测试类**：Consumer **Class**
+```Java
+public class Consumer {
   public static void main(String args[]){
-    //// 这是原有的对象示例化方式：**new** 关键字; 这不仅要求我们了解接口，还要了解已知所有的实现类。
+    //// 1. NEW：这是原有的对象示例化方式：**new** 关键字; 这不仅要求我们了解接口，还要了解已知所有的实现类。
     // 此时：相当于是**自己造**出来的汽车，然而我们并不要求**消费者**进行生产，只需要从**工厂购买**即可。
-    // Car c1 = new Wuling();
-    // Car c2 = new Tesla();
+    Car c1 = new Wuling();
+    Car c2 = new Tesla();
+
+    //// 2. 使用工厂创建：
+    Car cf1 = CarFactory.getCar("五菱");
+    Car cf2 = CarFactory.getCar("特斯拉");
 
     //// **工厂模式**实现了不去用**new**，而用工厂方法替代
     // 对象实现了方法：
     c1.name();
     c2.name();
+    cf1.name();
   }
 }
 ```
