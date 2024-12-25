@@ -125,13 +125,14 @@ e.g. 单例模式 ——> 系统开销
 - 实例化对象不使用new，用工厂代替
 - 将选择实现类，创建对象统一管理和控制。从而将调用者与实现类解耦。
 ## 5. 代码示例：
-### 5.1 简单工厂：【静态工厂】
+### 5.1 简单工厂模式：【静态工厂】
 1. **接口实现**：Car **Interface**  
 ```Java
 public interface Car {
   void name();
 }
 ```
+
 2. **实现类**：
 - Wuling Car **Class**  
 ```Java
@@ -141,6 +142,7 @@ public class Wuling implement Car {
   }
 }
 ```
+
 ​- Tesla **Class**:
 ```Java
 public class Tesla implement Car{
@@ -149,15 +151,16 @@ public class Tesla implement Car{
   }
 }
 ```
+
 3. **工厂类**：Factory **Class**  
 ```Java
 // 简单工厂 —— 也叫【静态工厂】
 // 增加一个新产品，不修改code做不到
 // 但大多数情况仍然很多使用 简单工厂，因为开闭原则的满足可能需要很大的代价
 
-// 开闭原则
+// 不满足-开闭原则
 public class CarFactory {
-  // 方法一：但**简单工厂模式**这样有个缺点不符合OOP原则1：开闭原则，当新的对象出现时，仍然需要修改该方法的逻辑
+  // 方法1：但**简单工厂模式**这样有个缺点不符合OOP原则1：开闭原则，当新的对象出现时，仍然需要修改该方法的逻辑
   public static Car getCar(String car){ // 这里的第一个**Car**代表返回的是一个一个**Car()对象**
     if (car.equals("五菱"){
       return new Wuling();
@@ -197,4 +200,76 @@ public class Consumer {
     cf1.name();
   }
 }
+```  
+
+
+
+
+
+
+### 5.2 工厂方法模式：
+1. **接口实现**：
+- Car **Interface**  
+```Java
+public interface Car {
+  void name();
+}
 ```
+**为了完全满足开闭原则，此处将再实现一个车工厂的接口**
+- CarFactory **Interface**  
+```Java
+public interface Car {
+  Car getCar();
+}
+```
+
+2. **实现类**：
+- Wuling Car **Class**  
+```Java
+public class Wuling implement Car {
+  public void name(){
+    system.out.println("五菱宏光");
+  }
+}
+```
+​- Tesla **Class**:
+```Java
+public class Tesla implement Car{
+  public void name(){
+    system.out.println("特斯拉");
+  }
+}
+```
+**此时将为每个汽车再单独添加一个自己的工厂**，满足了开闭原则，但是代码量将大大上升。  
+- WulingFactory **Class**:
+```Java
+public class WulingFactory implement CarFactory{
+  @Override
+  public Car getCar(){
+    return new Wuling();
+  }
+}
+```
+
+- TeslaFactory **Class**:
+```Java
+public class TeslaFactory implement CarFactory{
+  @Override
+  public Car getCar(){
+    return new Tesla();
+  }
+}
+```
+
+4. **测试类**：Consumer **Class**
+```Java
+public class Consumer {
+  public static void main(String args[]){
+    Car c1 = new TeslaFactory().getCar();
+
+    cf1.name();
+  }
+}
+```  
+
+
